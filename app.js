@@ -17,6 +17,7 @@ const game = {
     { name: "pokeball", quantity: 8 },
     { name: "rare candy", quantity: 99 },
   ],
+  collection: [],
 }
 
 //console.dir(pokemon, { maxArrayLength: null })
@@ -153,9 +154,9 @@ pokemon.forEach(p => {
 //Add the `pokemonObj` to the `game.party` array.
 //not return anything
 
-game.catchPokemon = (pokemonObj) => {
-  game.party.push(pokemonObj);
-};
+// game.catchPokemon = (pokemonObj) => {
+//   game.party.push(pokemonObj);
+// };
 
 /*
 Exercise 11
@@ -171,14 +172,23 @@ Solve Exercise 11 here:
 */
 
 game.catchPokemon = (pokemonObj) => {
+  // 1. Add the Pokémon to the party
   game.party.push(pokemonObj);
+
+  // 2. Find the pokeball item in inventory
+  const pokeballItem = game.items.find(item => item.name === "pokeball");
+
+  // 3. Decrement the pokeballs
+  pokeballItem.quantity--;
 };
 
-//For each item object in game.items, check if its name is 'pokeball'.”
-const pokeballItem = game.items.find(i => i.name === 'pokeball');
+const pikachu = pokemon.find(p => p.name === "Pikachu");
+game.catchPokemon(pikachu);
 
-pokeballItem.quantity--;
-console.log(game.items);
+
+//For each item object in game.items, check if its name is 'pokeball'.”
+
+console.log('here:',game.items);
 
 /*
 Exercise 12
@@ -306,14 +316,13 @@ console.dir(game.party, { depth: null });
 
 /*
 Exercise 18
-Add a new property to the `game` object called `collection` and initialize its value to an empty array.
 
 Copy the `catchPokemon` method you wrote in Exercise Twelve and paste it below. Modify it so that:
 
   - Ensure that no more than six Pokemon can be in the party at any time. 
-
+  
     Excess Pokemon should be placed in the `game.collection` array.
-    
+
   - It's up to you how to distribute Pokemon in a situation where more than six 
     would be placed into the `game.party` array.
 
@@ -325,3 +334,111 @@ Also, log the `game.items` array to confirm that the pokeball quantity is being 
 
 Solve Exercise 18 here:
 */
+
+
+
+game.catchPokemon = (pokemonObj) => {
+
+  const pokeballItem = game.items.find(i => i.name === 'pokeball');
+  pokeballItem.quantity--;
+
+  
+  if(game.party.length < 6) {
+    game.party.push(pokemonObj);
+  } else {
+    game.collection.push(pokemonObj);
+  }
+
+};
+
+// const pikachu = pokemon.find(p => p.name === "Pikachu");
+// game.catchPokemon(pikachu);
+
+const Arbok = pokemon.find(p => p.name === "Arbok");
+game.catchPokemon(Arbok);
+
+const Weedle = pokemon.find(p => p.name === "Weedle");
+game.catchPokemon(Weedle);
+
+const Charmeleon = pokemon.find(p => p.name === "Charmeleon");
+game.catchPokemon(Charmeleon);
+
+console.log('collection:', game.collection);
+console.log('party:', game.party);
+console.log('pokeball number:', game.items)
+
+// console.log(game.items);
+
+/*
+Exercise 20
+Copy the `catchPokemon` method that you just wrote above, and paste it below. Modify is so that you can just pass in the name of a Pokemon instead of an entire object,
+and the method will look up the Pokemon from the data set for you.
+
+
+The string passed in should be allowed to be any case (for example, if the string 'PiKacHU' is passed to the function, it should match to 'Pikachu' in the data set). 
+
+If there is not a match, then return a string noting that the selected Pokemon does not exist. Ensure you do not decrement the pokeball count if an invalid Pokemon name is passed in, 
+and also ensure that the Pokemon isn't added to the `game.party` or the `game.collection`.
+
+Solve Exercise 20 here:
+*/
+
+game.catchPokemon = (name) => {
+
+  // 1. Normalize input
+  const normalizedName = name.toLowerCase();
+
+  // 2. Find the Pokémon (not filter — find returns ONE object)
+  const pokemonObj = pokemon.find(p => p.name.toLowerCase() === normalizedName);
+
+  // 3. If it doesn't exist → return an error message
+  if (!pokemonObj) {
+    return `There is no Pokémon called "${name}"`;
+  }
+};
+
+console.log(game.catchPokemon("dragons"));
+
+
+/*
+Exercise 21
+Dynamically construct an object with the existing `pokemon` data sorted by the different pokemon types. The object will have this structure:
+
+{
+  grass: [
+    { number: 1, name: 'Bulbasaur', type: 'grass', hp: 45, starter: true },
+    { number: 2, name: 'Ivysaur', type: 'grass', hp: 60, starter: false },
+    { number: 3, name: 'Venusaur', type: 'grass', hp: 80, starter: false },
+    * more grass type Pokemon objects...
+  ],
+  fire: [
+    { number: 4, name: 'Charmander', type: 'fire', hp: 39, starter: true },
+    * more fire type Pokemon objects...
+  ],
+  water: [
+    * water type Pokemon objects...
+  ],
+  * etc... until there is an array for every Pokemon type!
+}
+
+Log the object when it's constructed.
+
+Solve Exercise 21 here:
+*/
+
+const pokemonByType = {};
+
+for (let i = 0; i < pokemon.length; i++) {
+  const p = pokemon[i];        // current Pokémon object
+  const type = p.type;         // e.g. "grass", "fire", "water"
+
+  // If this type doesn't exist yet in the object, create an empty array for it
+  if (!pokemonByType[type]) {
+    pokemonByType[type] = [];
+  }
+
+  // Add the current Pokémon to the correct array
+  pokemonByType[type].push(p);
+}
+
+console.log(pokemonByType);

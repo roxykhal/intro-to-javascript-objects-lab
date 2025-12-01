@@ -128,10 +128,9 @@ game.gyms.forEach(gym => {
 
  //7. Evolve the starter Pokémon you added to your party earlier. Each starter Pokémon evolves into a specific one. - bit confused on this one.
 
-game.party.splice(0, 1, 'IvySaur');
-
-//console.log(game.party[0]);
-
+game.party = game.party.map((poke) =>
+  poke.name === "Bulbasaur" ? pokemon[1] : poke
+);
 
 //Exercise 8 - Print the name of each Pokémon in your party - Party is an array in the object, pokemon is the placeholder for the current element.
 
@@ -143,7 +142,7 @@ game.party.forEach(Pokemon =>
  //Exercise 9 - Print out all the start pokemon from the pokemon array
 
 pokemon.forEach(p => {
-  if(p.starter === true) {
+  if(p.starter) {
     console.log(p.name);
   }
 });
@@ -440,5 +439,3 @@ for (let i = 0; i < pokemon.length; i++) {
   // Add the current Pokémon to the correct array
   pokemonByType[type].push(p);
 }
-
-console.log(pokemonByType);
